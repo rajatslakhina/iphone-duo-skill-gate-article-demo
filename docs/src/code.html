@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{margin:0;box-sizing:border-box}body{width:1200px;height:628px;background:#0f172a;font-family:Inter,"Helvetica Neue",Arial,sans-serif;padding:40px 48px;color:#e2e8f0}
+.k{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;font-weight:600}
+h2{font-size:30px;font-weight:800;margin-top:8px;color:#f8fafc}
+pre{margin-top:22px;background:#020617;border:1px solid #1e293b;border-radius:16px;padding:22px 26px;font:17px/1.55 "JetBrains Mono",Menlo,"DejaVu Sans Mono",monospace;color:#e2e8f0;white-space:pre}
+.kw{color:#f472b6}.ty{color:#93c5fd}.fn{color:#fde68a}.cm{color:#64748b}.en{color:#86efac}
+</style></head><body>
+<div class="k">DuoReadiness · FindingsContract</div>
+<h2>Check the agent’s findings list like an API response</h2>
+<pre><span class="kw">guard let</span> file = files[item.path] <span class="kw">else</span> { <span class="kw">return</span> <span class="en">.unknownFile</span>(item.path) }
+<span class="kw">let</span> lines = file.lines
+<span class="kw">guard</span> item.line &gt;= 1, item.line &lt;= lines.count <span class="kw">else</span> {
+    <span class="kw">return</span> <span class="en">.lineOutOfRange</span>(path: item.path, line: item.line, lineCount: lines.count)
+}
+<span class="kw">guard</span> item.kind == <span class="en">.pattern</span> <span class="kw">else</span> { <span class="kw">return nil</span> }
+<span class="kw">guard let</span> pattern = item.pattern <span class="kw">else</span> {
+    <span class="kw">return</span> <span class="en">.patternItemWithoutPattern</span>(path: item.path, line: item.line)
+}
+<span class="kw">let</span> code = <span class="ty">PatternScanner</span>.<span class="fn">stripLineComment</span>(lines[item.line - 1])
+<span class="kw">return</span> pattern.<span class="fn">matches</span>(code) ? <span class="kw">nil</span>
+    : <span class="en">.patternNotOnLine</span>(path: item.path, line: item.line, pattern: pattern)</pre>
+</body></html>

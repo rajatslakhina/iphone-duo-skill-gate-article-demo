@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{margin:0;box-sizing:border-box}body{width:1600px;height:940px;background:#f8fafc;font-family:Inter,"Helvetica Neue",Arial,sans-serif;color:#0f172a;padding:48px 64px;position:relative}
+h2{font-size:36px;font-weight:800}p.s{font-size:21px;color:#475569;margin-top:6px}
+.box{position:absolute;border-radius:18px;padding:20px 24px;border:2px solid #cbd5e1;background:#fff;box-shadow:0 6px 18px #0f172a12}
+.box h3{font-size:24px;font-weight:800}.box p{font-size:18px;color:#475569;margin-top:6px;line-height:1.35}
+.in{border-color:#3b82f6}.in h3{color:#1d4ed8}
+.det{border-color:#0f172a}
+.rec{border-color:#0f172a;background:#0f172a;color:#f8fafc}.rec h3{color:#f8fafc}.rec p{color:#cbd5e1}
+.out{padding:14px 20px}.out h3{font-size:21px}.out p{font-size:16px}
+.g{border-color:#3b82f6}.g h3{color:#1d4ed8}.m{border-color:#ef4444}.m h3{color:#b91c1c}.o{border-color:#f59e0b}.o h3{color:#b45309}.p{border-color:#a855f7}.p h3{color:#7e22ce}
+.gate{border-color:#16a34a;background:#f0fdf4}.gate h3{color:#15803d}
+.side{border-color:#64748b;border-style:dashed}
+svg{position:absolute;left:0;top:0}
+.lbl{position:absolute;font-size:16px;color:#64748b;font-weight:600}
+</style></head><body>
+<h2>Vendor skill + deterministic gate: who checks what</h2>
+<p class="s">DuoReadiness reconciles an agent’s findings list against a plain text scan, then decides how much the agent may do alone.</p>
+<svg width="1600" height="940"><defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker></defs>
+<g stroke="#475569" stroke-width="3" fill="none" marker-end="url(#a)">
+<path d="M404,250 L520,330"/><path d="M404,470 L520,400"/>
+<path d="M900,300 L988,212"/><path d="M900,345 L988,330"/><path d="M900,390 L988,448"/><path d="M900,425 L988,563"/>
+<path d="M1140,624 L1140,686"/>
+<path d="M404,700 L558,735"/><path d="M404,850 L558,800"/>
+</g></svg>
+<div class="box in" style="left:64px;top:170px;width:340px"><h3>Agent runs the skill</h3><p>Returns a findings list as JSON before any edit: path, line, kind, pattern, note.</p></div>
+<div class="box det" style="left:64px;top:400px;width:340px"><h3>Deterministic scan</h3><p>The text patterns in Apple’s Step 2 list, every file, every line. Known exceptions filtered out.</p></div>
+<div class="box rec" style="left:520px;top:270px;width:380px"><h3>Reconcile + findings contract</h3><p>Each cited line must exist and contain its pattern. Semantic items go to a person.</p></div>
+<div class="box out g" style="left:990px;top:175px;width:350px"><h3>Confirmed · 7</h3><p>found by both</p></div>
+<div class="box out m" style="left:990px;top:292px;width:350px"><h3>Missed by skill · 2</h3><p>status bar orientation · height == 844</p></div>
+<div class="box out o" style="left:990px;top:410px;width:350px"><h3>Rejected · 1</h3><p>cites line 31 of a 14-line file</p></div>
+<div class="box out p" style="left:990px;top:528px;width:350px"><h3>Needs a person · 1</h3><p>size read once at appearance</p></div>
+<div class="box side" style="left:64px;top:630px;width:340px"><h3>Pin check</h3><p>Rules digest + version: unchanged, upgraded, version-only, or changed silently.</p></div>
+<div class="box side" style="left:64px;top:800px;width:340px"><h3>Pose matrix</h3><p>4 size-class combinations; layout from size class only.</p></div>
+<div class="box gate" style="left:560px;top:690px;width:680px"><h3>MigrationGate → agent mode</h3><p><b>Unattended</b> only for a complete, valid, mechanical list against a pinned skill. <b>Findings only</b> otherwise. <b>Blocked</b> until an upgraded or silently changed skill is re-pinned. Sample result: findings only, not ready to ship.</p></div>
+</body></html>
