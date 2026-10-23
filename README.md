@@ -4,15 +4,15 @@ Apple's first step for iPhone Duo readiness is an agent skill: ask Xcode's codin
 
 `DuoReadiness` is the half a vendor skill can't own:
 
-- **`PatternScanner`**: a plain text scan for the text patterns in Apple's Step 2 list (`UIScreen.main`, device / status bar / interface orientation, idiom checks, fixed device sizes, regular width treated as iPad, full-bleed fill). Comment text is ignored; known exceptions are filtered with a written reason.
+- **`PatternScanner`**: a plain text scan for the text patterns in Apple's Step 2 list (`UIScreen.main`, device / status bar / interface orientation, idiom checks, fixed device sizes, regular width treated as iPad, full-bleed fill). Text after `//` is ignored (block comments are not). Known exceptions, each with a written reason, are filtered out by `Reconciliation`.
 - **`FindingsContract`**: checks the agent's findings list like an API response. Every item must cite a real file and line, and a pattern item must cite a line that contains the pattern.
 - **`Reconciliation`**: confirmed, missed by the skill, rejected by the contract, and semantic items that need a person.
 - **`PoseMatrix`**: the root-layout decision across all four size-class combinations. It must always return a layout, and that layout must not depend on idiom.
 - **`SkillManifest` + `PinCheck`**: pins the skill by version *and* rules digest, so a silent content change is caught.
-- **`MigrationGate`**: decides the agent mode (unattended, findings only, blocked) and whether the code is ready to ship.
+- **`MigrationGate`**: decides the agent mode (unattended, findings only, blocked) and whether the code is ready to ship. `shipReady` covers the scan and the pose matrix only: semantic items in `needsHumanReview` still need a person's sign-off, and the release still needs a pass on the iPhone Duo simulator.
 - **`MigrationBrief`**: the brief to hand any agent: skill version and digest, known exceptions, definition of done, findings list before edits.
 
-Article: (added after publish)
+Article: [Apple’s iPhone Duo Migration Starts With an Agent Skill. Treat It Like a Dependency, Not a Sign-Off.](https://medium.com/@er.rajatlakhina/apples-iphone-duo-migration-starts-with-an-agent-skill-b7f983d41d32)
 
 ![The demo app on the iOS Simulator: skill vs scan](Demo/Screenshots/gate.png)
 
@@ -60,8 +60,9 @@ Library only: `swift build && swift test`.
 
 ## Verification status
 
-- `swift build -Xswiftc -warnings-as-errors` and `swift test` (20 tests, 0 failures) pass on Linux (Swift 6.1.2). The `library` CI job runs the same two commands on macOS; its result appears on the Actions tab after the first push.
-- The `demo-on-simulator` CI job is set up to build `Demo.xcodeproj` with `xcodebuild`, install and launch the app on an iPhone Simulator on a GitHub-hosted macOS runner, check the process is still alive, and capture the screenshots in `Demo/Screenshots/`. Those runs use a standard iPhone Pro simulator, not the iPhone Duo simulator from Xcode 27.1.
+- `swift build -Xswiftc -warnings-as-errors` and `swift test` (20 tests, 0 failures) pass on Linux (Swift 6.1.2), and the `library` CI job passed the same two commands on a GitHub-hosted macOS runner (commit `52066e9`).
+- The `demo-on-simulator` CI job passed on the same commit: `xcodebuild` (Xcode 16.4, iOS 18.5 SDK) built `Demo.xcodeproj`, the app was installed and launched on an iPhone 17 Pro simulator, the process was still alive after launch, and the two screenshots in `Demo/Screenshots/` were captured from that run (committed by CI in `5b9daf0`).
+- Not run on the iPhone Duo simulator from Xcode 27.1, which GitHub-hosted runners don't have.
 
 ![Pose matrix and skill pin screen](Demo/Screenshots/matrix.png)
 
